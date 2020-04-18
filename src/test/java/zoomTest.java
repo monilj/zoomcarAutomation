@@ -1,65 +1,42 @@
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.TouchAction;
+import io.appium.java_client.MobileBy;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.remote.MobileCapabilityType;
-import io.appium.java_client.remote.MobilePlatform;
-import io.appium.java_client.touch.WaitOptions;
-import io.appium.java_client.touch.offset.PointOption;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import io.appium.java_client.android.AndroidElement;
+import org.openqa.selenium.By;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.Duration;
-import java.util.HashMap;
-
-import static io.appium.java_client.touch.WaitOptions.waitOptions;
-import static io.appium.java_client.touch.offset.PointOption.point;
-import static java.time.Duration.ofMillis;
 
 public class zoomTest {
+    static AndroidDriver<AndroidElement> driver;
 
-        private static AndroidDriver androidDriver;
+    @BeforeTest
+    public void driverInstance() throws Exception {
+        driver = DesiredCap.desiredCapabilities();
+    }
 
-        @BeforeTest
-        public void desiredCapabilities() throws Exception {
-        File appDir = new File("app");
-        File app = new File(appDir, "com.zoomcar_2019-04-18.apk");
-        DesiredCapabilities cap = new DesiredCapabilities();
-        cap.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.ANDROID);
-        cap.setCapability(MobileCapabilityType.DEVICE_NAME, "Android Device");
-        cap.setCapability(MobileCapabilityType.PLATFORM_VERSION,"7.0");
-//        cap.setCapability(MobileCapabilityType.AUTOMATION_NAME,"UiAutomator2");
-        //cap.setCapability(MobileCapabilityType.APP, app.getAbsolutePath());
-        cap.setCapability("appPackage", "com.zoomcar");
-        cap.setCapability("appActivity", "com.zoomcar.activity.SplashActivity");
-        try
-        {
-            androidDriver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), cap);
-        }
-        catch(MalformedURLException e) {
-            e.printStackTrace();
-        }
-                //swipeHorizontal((AndroidDriver) androidDriver,0.01,0.9,0.5,3000);
-                swipeHorizontal((AndroidDriver) androidDriver,0.9,0.01,0.5,3000);
-        System.out.printf("sssdasdasdasdad");
-}
+    @Test(priority = 1)
+    public void testMobileHorizontalScroll() throws InterruptedException {
+        AndroidElement scrollToSelectCity = driver.findElement(
+                MobileBy.AndroidUIAutomator(
+                        "new UiScrollable(new UiSelector()).setAsHorizontalList().scrollIntoView("
+                                + "new UiSelector().textStartsWith(\"GET\"))"));
+        scrollToSelectCity.click();
+        String verifyText = driver.findElement(By.id("text_popular_cities")).getText();
+        Assert.assertTrue(verifyText.equals("POPULAR CITIES"));
+    }
 
-@Test
-public void swipeHorizontal(AndroidDriver driver, double startPercentage, double finalPercentage, double anchorPercentage, int duration) throws Exception {
-        Dimension size = driver.manage().window().getSize();
-        int anchor = (int) (size.height * anchorPercentage);
-        int startPoint = (int) (size.width * startPercentage);
-        int endPoint = (int) (size.width * finalPercentage);
-        new TouchAction(androidDriver).press(PointOption.point(anchor, startPoint))
-                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(duration)))
-                .moveTo(PointOption.point(endPoint, anchor))
-                .release().perform();
-        System.out.printf("sssssss");
-}
+    @Test(priority = 2)
+    public void testMobileVerticalScroll() throws InterruptedException {
+        AndroidElement scrollToDesiredCity = driver.findElement(
+                MobileBy.AndroidUIAutomator(
+                        "new UiScrollable(new UiSelector()).scrollIntoView("
+                                + "new UiSelector().text(\"MADURAI\"))"));
+        scrollToDesiredCity.click();
+        driver.findElementByAccessibilityId("Navigate up").click();
+        String desiredCity = driver.findElementById("text_city").getText();
+        System.out.printf(desiredCity);
+        Assert.assertTrue(desiredCity.equalsIgnoreCase("MADURAI"));
 
+    }
 }

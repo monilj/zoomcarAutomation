@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ZoomCar.iml" filepath="$PROJECT_DIR$/.idea/modules/ZoomCar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ZoomCar.iml" filepath="$PROJECT_DIR$/.idea/modules/ZoomCar.iml" group="ZoomCar" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ZoomCar_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ZoomCar_main.iml" group="ZoomCar" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ZoomCar_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ZoomCar_test.iml" group="ZoomCar" />
     </modules>
